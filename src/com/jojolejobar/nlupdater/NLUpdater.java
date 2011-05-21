@@ -41,7 +41,7 @@ import org.apache.http.params.HttpParams;
 
 public class NLUpdater extends Activity{
 		
-	private static final String URL = "http://beta.nameless-rom.fr/";
+	private static final String URL = "http://update.nameless-rom.fr/";
 	private static final int CODE_PREFERENCES = 0;
 	private NLJson mainJson = null;
 	private TextView textViewVersion = null;
