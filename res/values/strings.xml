@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nameless Updater</string>
+    <string name="menuCheck">Vérifier les mise à jour</string>
+    <string name="wait">Patientez</string>
+    <string name="serverWait">En attente du serveur...</string>
+    <string name="serverCheckSuccess">Mis à jour réussie</string>
+    <string name="newVersion">Une nouvelle version est diponible : </string>
+    <string name="changelog">Changelog : </string>
+    <string name="noNewVersion">Vous disposez de la version la plus récente : </string>
+    <string name="fullVersion">Version complète</string>
+    <string name="update">Mise à niveau</string>
+    <string name="downloadProgress">Téléchargement en cours...</string>
+    <string name="verificationProgress">Vérification en cours...</string>
+    <string name="menuSettings">Paramètres</string>
+    <string name="preferencesActualisation">Fréquences d\'actualisation</string>
+    <string name="preferenceCheckActu">Actualisation automatique</string>
+    <string name="preferenceListActu">Intervalle d\'actualisation</string>
+    <string-array name="preferenceListActuEntries">.
+			    <item>Une fois par jour</item>
+				<item>Une fois par semaine</item>
+	</string-array> 
+	<string-array name="preferenceListActuValue">.
+			    <item>86400000</item>
+				<item>604800000</item>
+	</string-array>
+	<string name="set_preferences">Paramètres</string>
+	<string name="preferencesAbout">A propos</string>
+	<string name="preferencesAboutSum">Créée par Jojolejobar pour NameLess</string>
+	<string name="preferencesVersion">Version</string>
+	<string name="information">Info</string>
+	<string name="error">Erreur</string>
+	<string name="noSDCard">Il n\'y a pas de carte SD inséré</string>
+	<string name="impossibleDownload">Téléchargement impossible</string>
+	<string name="successDownload">Téléchargement réussi</string>
+	<string name="stopDownload">Téléchargement stoppé</string> 
+</resources>

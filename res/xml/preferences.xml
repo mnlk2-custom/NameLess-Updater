@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+            android:title="@string/preferencesActualisation">
+
+        <CheckBoxPreference
+                android:key="checkBoxActu"
+                android:title="@string/preferenceCheckActu"
+                android:defaultValue="true"/>
+                
+       <ListPreference
+                android:key="listActualisation"
+                android:title="@string/preferenceListActu"
+                android:entries="@array/preferenceListActuEntries"
+                android:entryValues="@array/preferenceListActuValue"
+                android:dialogTitle="@string/preferenceListActu"
+                android:dependency="checkBoxActu"
+                android:defaultValue="86400000"/>
+
+  </PreferenceCategory>
+  <PreferenceCategory
+            android:title="@string/preferencesAbout">
+
+        <Preference
+        	android:title="@string/preferencesAbout"
+        	android:summary="@string/preferencesAboutSum"
+        />
+        
+        <Preference
+        	android:key="preferencesVersion"
+        	android:title="@string/preferencesVersion"
+        />
+
+  </PreferenceCategory>
+</PreferenceScreen>
