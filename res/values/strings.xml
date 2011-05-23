@@ -4,7 +4,7 @@
     <string name="menuCheck">Vérifier les mise à jour</string>
     <string name="wait">Patientez</string>
     <string name="serverWait">En attente du serveur...</string>
-    <string name="serverCheckSuccess">Mis à jour réussie</string>
+    <string name="serverCheckSuccess">Vérification réussie</string>
     <string name="newVersion">Une nouvelle version est diponible : </string>
     <string name="changelog">Changelog : </string>
     <string name="noNewVersion">Vous disposez de la version la plus récente : </string>
@@ -26,7 +26,7 @@
 	</string-array>
 	<string name="set_preferences">Paramètres</string>
 	<string name="preferencesAbout">A propos</string>
-	<string name="preferencesAboutSum">Créée par Jojolejobar pour NameLess</string>
+	<string name="preferencesAboutSum">Créée par Jojolejobar (Olboss) pour NameLess</string>
 	<string name="preferencesVersion">Version</string>
 	<string name="information">Info</string>
 	<string name="error">Erreur</string>

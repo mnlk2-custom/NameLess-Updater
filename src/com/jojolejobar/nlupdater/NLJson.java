@@ -14,7 +14,7 @@ public class NLJson {
 	private ArrayList<NLVersionJson> mVersions;
 	
 	public NLJson(String URL){
-		this.mFile = NLHttpClient.getStringPage(URL + "/main.json");
+		this.mFile = NLHttpClient.getStringPage(URL + "/update.json");
 		
 		
 		try {
