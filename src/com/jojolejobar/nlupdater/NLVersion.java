@@ -18,7 +18,7 @@ public class NLVersion {
         }
         proc.destroy();
         
-        return version/*"NameLess-v.1.2"*/;
+        return /*version*/"NameLess-v.1.2";
     }
     
     public static boolean newVersion(NLJson mainJson){

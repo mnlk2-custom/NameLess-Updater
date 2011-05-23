@@ -41,12 +41,13 @@ import org.apache.http.params.HttpParams;
 
 public class NLUpdater extends Activity{
 		
-	private static final String URL = "http://update.nameless-rom.fr/";
+	private static final String URL = "http://beta.nameless-rom.fr/";
 	private static final int CODE_PREFERENCES = 0;
 	private NLJson mainJson = null;
 	private TextView textViewVersion = null;
 	private Button buttonUpdate = null, buttonFullVersion = null;	
 	private AlertDialog alert;
+	private String dir;
 	
     /** Called when the activity is first created. */
     @Override
@@ -62,14 +63,14 @@ public class NLUpdater extends Activity{
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	new DownloadFile().execute(URL + NLVersion.getNewVersion(mainJson).getUri() + "/" + NLVersion.getNewFromVersion(mainJson), 
-            			Environment.getExternalStorageDirectory().getAbsoluteFile() + "/" + NLVersion.getNewFromVersion(mainJson));
+            			dir ,NLVersion.getNewFromVersion(mainJson));
             }
         });
         
         buttonFullVersion.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	new DownloadFile().execute(URL + NLVersion.getNewVersion(mainJson).getUri() + "/" + NLVersion.getNewVersion(mainJson).getFull(), 
-            			Environment.getExternalStorageDirectory().getAbsoluteFile() + "/" + NLVersion.getNewVersion(mainJson).getFull());
+                		dir ,NLVersion.getNewVersion(mainJson).getFull());
             }
         });
         
@@ -193,6 +194,8 @@ public class NLUpdater extends Activity{
 		else{
 			this.stopService(new Intent(this, NLUpdaterService.class));
 		}
+		
+		this.dir = preferences.getString("editDownDest", "/mnt/sdcard/");
     }
    
     public static String getUrl(){
@@ -296,7 +299,16 @@ public class NLUpdater extends Activity{
     	@Override
 		protected Integer doInBackground(String... params) {
 			String toDownload = params[0];
-			String destination = params[1];
+			if(!params[1].endsWith("/")){
+				params[1] += "/";
+			}
+			String destination = params[1] + params[2];
+			
+			File dir = new File(params[1]);
+			
+			if(!dir.exists()){
+				dir.mkdirs();
+			}
 
 			if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
         		return 1;
