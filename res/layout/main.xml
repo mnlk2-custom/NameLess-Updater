@@ -6,10 +6,11 @@
     android:layout_height="fill_parent"
     >
     <TextView
-    	android:id="@+id/textViewVersion"
+    	android:id="@+id/tvChangelog"
     	android:gravity="center"
 	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"/>
+	    android:layout_height="wrap_content"
+	    android:text="@string/anyUpdate" />
 	<LinearLayout
 	    android:orientation="horizontal"
 	    android:gravity="center"
@@ -19,17 +20,18 @@
     	>
 		<Button
 			android:id="@+id/buttonUpdate"
-			android:text="@string/update"
+			android:text="@string/buttonUpdate"
 			android:layout_gravity="center_horizontal"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:visibility="gone"/>
 		<Button
-			android:id="@+id/buttonFullVersion"
-			android:text="@string/fullVersion"
+			android:id="@+id/buttonFull"
+			android:text="@string/buttonFull"
 			android:layout_gravity="center_horizontal"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:visibility="gone"/>
 	</LinearLayout>
 </LinearLayout>
+
