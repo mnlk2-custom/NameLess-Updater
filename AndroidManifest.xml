@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.jojolejobar.nlupdater"
-      android:versionCode="1" android:versionName="0.1">
+      android:versionCode="11" android:versionName="1.1">
     <uses-sdk android:minSdkVersion="10" />
-    
-    
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:testOnly="false" android:debuggable="false">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".NLUpdater"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
             <intent-filter>
             	<action android:name="android.intent.action.BOOT_COMPLETED" /> 
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity android:name=".NLPreferences" android:label="@string/preferencesTitle">
+        </activity>
+        <service android:name="NLUpdaterService">
+	        <intent-filter> 
+	        	<action android:name=".NLUpdaterService.ACTION" /> 
+	    	</intent-filter> 
+	    </service>
+			
         <receiver android:name="OnBootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 				<category android:name="android.intent.category.HOME" />
 			</intent-filter>
 		</receiver>
-		
-		<activity
-	        android:name=".NLPreferences"
-	        android:label="@string/set_preferences">
-		</activity>
-		
-		<service android:name=".NLUpdaterService" /> 
+
     </application>
 </manifest>

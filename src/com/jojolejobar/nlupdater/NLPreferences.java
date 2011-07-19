@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 public class NLPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener{
-	
-	private ListPreference listActualisation;
-	private EditTextPreference editDownDest;
-	
+	private ListPreference listUpdate;
+	private EditTextPreference editDownloadDest;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,35 +33,30 @@ public class NLPreferences extends PreferenceActivity implements OnSharedPrefere
 		//Default value
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
+		listUpdate = (ListPreference) findPreference("listUpdate");
+		listUpdate.setSummary(listUpdate.getEntry());
 		
-		//Set summary
-		this.listActualisation = (ListPreference) findPreference("listActualisation");
-		this.listActualisation.setSummary(this.listActualisation.getEntry());
-		editDownDest = (EditTextPreference) findPreference("editDownDest");
-		this.editDownDest.setSummary(this.editDownDest.getText());
+		editDownloadDest = (EditTextPreference) findPreference("editDownloadDest");
+		editDownloadDest.setSummary(editDownloadDest.getText());
 		
-		//Reset the download destination dir
-		Preference preferenceDownDest = (Preference) findPreference("preferenceDownloadDestination");
-		preferenceDownDest.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			
+		Preference preferenceDownloadDest = (Preference) findPreference("preferenceDownloadDest");
+		preferenceDownloadDest.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
-			public boolean onPreferenceClick(Preference pref) {
-				editDownDest.setText("/mnt/sdcard/");
-				return false;
+			public boolean onPreferenceClick(Preference arg0) {
+				editDownloadDest.setText(getString(R.string.defaultDownloadDir));
+				return true;
 			}
 		});
 		
-		
-    }
-
+	}
+	
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreference, String key) {
-		if(key.equals("listActualisation")){
-			this.listActualisation.setSummary(this.listActualisation.getEntry());
-		}
-		else if(key.equals("editDownDest")){
-			this.editDownDest.setSummary(this.editDownDest.getText());
-		}
+	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
+		listUpdate.setSummary(listUpdate.getEntry());
+		if(!editDownloadDest.getText().isEmpty())
+			editDownloadDest.setSummary(editDownloadDest.getText());
+		else
+			editDownloadDest.setText(getString(R.string.defaultDownloadDir));
 	}
 
 }
