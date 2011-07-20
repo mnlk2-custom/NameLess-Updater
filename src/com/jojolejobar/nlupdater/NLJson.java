@@ -1,11 +1,14 @@
 package com.jojolejobar.nlupdater;
 
+import java.io.Serializable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NLJson {
+public class NLJson implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private NLVersion lastVersion;
 	
 	public NLJson(String URL){
@@ -49,7 +52,6 @@ public class NLJson {
 		JSONArray versionArray = null;
 		try {
 			mVersion = mVersionArray.getJSONObject(iLastVersion).getString("version");
-			mChangelog = mVersionArray.getJSONObject(iLastVersion).getString("changelog");
 			mUri = mVersionArray.getJSONObject(iLastVersion).getString("uri");
 			jObjectVer = new JSONObject(NLNetwork.getStringPage(URL + mUri + "/mod.json"));
 			mFull = jObjectVer.getString("full");
@@ -58,6 +60,16 @@ public class NLJson {
 			for(int j = 0; j < versionArray.length(); j++){
 				mFromVersion[0][j] = versionArray.getJSONObject(j).getString("version");
 				mFromVersion[1][j] = versionArray.getJSONObject(j).getString("uri");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			mChangelog = mVersionArray.getJSONObject(iLastVersion).getString("changelog");
+			if(mChangelog.contains("url://")){
+				mChangelog = mChangelog.replace("url://", "");
+				mChangelog = NLNetwork.getStringPage(URL + "/" + mChangelog);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
