@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,7 @@ import android.widget.Toast;
 
 public class NLUpdater extends Activity {
 	
-	private TextView tvChangelog;
+	private TextView tvInfo, tvChangelog;
 	private Button buttonUpdate, buttonFull;
 	private static final String URL = "http://beta.nameless-rom.fr/";
 
@@ -51,6 +52,7 @@ public class NLUpdater extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        tvInfo = (TextView) findViewById(R.id.tvInfo);
         tvChangelog = (TextView) findViewById(R.id.tvChangelog);
         buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
         buttonUpdate.setOnClickListener(new OnClickListener() {
@@ -74,7 +76,13 @@ public class NLUpdater extends Activity {
         
         getPreferences();
         
-        new DownloadJSON().execute(URL);
+        final NLJson data = (NLJson) getLastNonConfigurationInstance();
+        if(data == null)
+        	new DownloadJSON().execute(URL);
+        else{
+        	mJson = data;
+        	onJSONDownloaded();
+        }
      
         if(!NLUpdaterService.isRunning() && preferences.getBoolean("checkBoxUpdate", false))
         	startService(new Intent().setComponent(new ComponentName(getPackageName(), NLUpdaterService.class.getName())));
@@ -151,7 +159,7 @@ public class NLUpdater extends Activity {
 	        if(result && mJson != null)
 	        	onJSONDownloaded();
 	        else{
-	        	tvChangelog.setText(R.string.errorCheck);
+	        	tvInfo.setText(R.string.errorCheck);
 	        	Toast.makeText(NLUpdater.this, getString(R.string.noConnection), Toast.LENGTH_LONG).show();
 	        }
 	        super.onPostExecute(result);
@@ -162,21 +170,26 @@ public class NLUpdater extends Activity {
      * Action when the JSON was downloaded
      */
     private void onJSONDownloaded(){
-    	if(mJson == null){
-    		tvChangelog.setText(R.string.errorCheck);
+    	if(mJson == null || mJson.getLastVersion() == null){
+    		tvInfo.setText(R.string.errorCheck);
+    		tvInfo.setTextSize(15);
+    		tvChangelog.setText("");
         	Toast.makeText(NLUpdater.this, getString(R.string.noConnection), Toast.LENGTH_LONG).show();
         	return;
     	}
     	if(NLGetInfo.hasNewVersion(mJson.getLastVersion())){
-    		tvChangelog.setText(getString(R.string.newVersionAvailable) + " : " + mJson.getLastVersion().getVersion() + "\n" +
-    				getString(R.string.changelog) + " : " + mJson.getLastVersion().getChangelog());
+    		tvInfo.setText(getString(R.string.newVersionAvailable) + " : " + mJson.getLastVersion().getVersion() + "\n");
+    		tvInfo.setTextSize(25);
+    		tvChangelog.setText(Html.fromHtml(mJson.getLastVersion().getChangelog()));
     		buttonFull.setVisibility(View.VISIBLE);
     		if(NLGetInfo.getFromVersionURL(mJson.getLastVersion()) != null){
     			buttonUpdate.setVisibility(View.VISIBLE);
     		}
     	}
     	else{
-    		tvChangelog.setText(R.string.anyUpdate);
+    		tvInfo.setText(R.string.anyUpdate);
+    		tvInfo.setTextSize(15);
+    		tvChangelog.setText("");
     		buttonFull.setVisibility(View.GONE);
     		buttonUpdate.setVisibility(View.GONE);
     	}
@@ -346,4 +359,11 @@ public class NLUpdater extends Activity {
     public static String getUrl() {
 		return URL;
 	}
+
+    /************************ Manage change configuration *****************/
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        final NLJson data = this.mJson;
+        return data;
+    }
 }
