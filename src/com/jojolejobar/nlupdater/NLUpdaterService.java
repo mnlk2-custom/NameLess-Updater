@@ -10,8 +10,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
@@ -54,7 +52,7 @@ public class NLUpdaterService extends Service{
 	
 	public void checkServer(){
 		NLJson mJson;
-		if(isConnected())
+		if(NLNetwork.isConnected(this))
 			mJson = new NLJson(NLUpdater.getUrl());
 		else
 			return;		
@@ -76,18 +74,5 @@ public class NLUpdaterService extends Service{
 	public static boolean isRunning(){
 		return running;
 	}
-	
-	/**
-     * Check the network state
-     * @return true if the phone is connected
-     */
-	private boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-            return true;
-        }
-        return false;
-    }
 
 }

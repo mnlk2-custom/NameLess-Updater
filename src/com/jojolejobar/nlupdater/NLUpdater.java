@@ -18,13 +18,10 @@ import java.net.URLConnection;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -112,18 +109,6 @@ public class NLUpdater extends Activity {
     }
     
     /************************ Network access **************************/
-    /**
-     * Check the network state
-     * @return true if the phone is connected
-     */
-    private boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-            return true;
-        }
-        return false;
-    }
     
     /**
      * Class to check the server and download the JSON file
@@ -152,7 +137,7 @@ public class NLUpdater extends Activity {
 		
 		@Override
 		protected Boolean doInBackground(String... url) {
-			if(isConnected())
+			if(NLNetwork.isConnected(NLUpdater.this))
 				mJson = new NLJson(url[0]);
 			else{
 				return false;
@@ -225,7 +210,7 @@ public class NLUpdater extends Activity {
     	
     	@Override
 		protected Integer doInBackground(String... params) {
-    		if(!isConnected())
+    		if(!NLNetwork.isConnected(NLUpdater.this))
     			return 2;
 			String toDownload = params[0];
 			if(!params[1].endsWith("/")){
@@ -328,7 +313,7 @@ public class NLUpdater extends Activity {
 				NLAlert.errorWriteAlert(NLUpdater.this, destination);
 			}
 			else if(result == 2){
-				NLAlert.downloadStopAlert(NLUpdater.this);
+				NLAlert.noDownloadAlert(NLUpdater.this);
 			}
 			mProgressDialog.dismiss();
 			super.onPostExecute(result);
@@ -336,7 +321,7 @@ public class NLUpdater extends Activity {
 		
 		@Override
 		protected void onCancelled (){
-			NLAlert.noDownloadAlert(NLUpdater.this);
+			NLAlert.downloadStopAlert(NLUpdater.this);
 			mProgressDialog.dismiss();
 			super.onCancelled();
 		}
