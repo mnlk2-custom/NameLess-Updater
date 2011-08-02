@@ -10,8 +10,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
@@ -19,21 +17,23 @@ public class NLUpdaterService extends Service{
 
 	private Timer timer ; 
 	private SharedPreferences preferences;
+	private static boolean running = false;
 	 
 	@Override
 	public void onCreate() { 
 	    super.onCreate(); 
 	    timer = new Timer(); 
 	    preferences = PreferenceManager.getDefaultSharedPreferences(this);
+	    running = true;
 	} 
 	 
 	@Override 
 	public int onStartCommand(Intent intent, int flags, int startId) { 
 	    timer.scheduleAtFixedRate(new TimerTask() { 
 	        public void run() { 
-	        	notificationVerif();
+	        	checkServer();
 	        } 
-	    }, 0, Long.valueOf(preferences.getString("listActualisation", "86400000"))); 
+	    }, 60000, Long.valueOf(preferences.getString("listUpdate", "86400000"))); 
 	 
 	    return START_NOT_STICKY; 
 	} 
@@ -41,6 +41,7 @@ public class NLUpdaterService extends Service{
 	@Override 
 	public void onDestroy() { 
 	    this.timer.cancel(); 
+	    running = false;
 	}
 	
 	
@@ -49,16 +50,16 @@ public class NLUpdaterService extends Service{
 		return null;
 	}
 	
-	public void notificationVerif(){
-		NLJson mainJson;
-		if(isNetworkAvailable())
-			mainJson = new NLJson(NLUpdater.getUrl());
+	public void checkServer(){
+		NLJson mJson;
+		if(NLNetwork.isConnected(this))
+			mJson = new NLJson(NLUpdater.getUrl());
 		else
 			return;		
 		
-		if(NLVersion.newVersion(mainJson)){
-			String ticker = "Une nouvelle version de NameLess est disponible";
-			String text = "Nouvelle version : " + NLVersion.getNewVersion(mainJson).getVersion();
+		if(NLGetInfo.hasNewVersion(mJson.getLastVersion())){
+			String ticker = getString(R.string.updateAvalaibleNotifTitle);
+			String text = getString(R.string.newVersionNotif);
 			
 			NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	    	nm.cancel(R.string.app_name);
@@ -70,14 +71,8 @@ public class NLUpdaterService extends Service{
 		}
 	}
 	
-	public boolean isNetworkAvailable() {
-    	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni!=null && ni.isAvailable() && ni.isConnected()) {
-            return true;
-        } else {
-            return false; 
-        }
+	public static boolean isRunning(){
+		return running;
 	}
 
 }

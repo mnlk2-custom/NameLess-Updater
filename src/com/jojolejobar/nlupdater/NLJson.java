@@ -1,21 +1,24 @@
 package com.jojolejobar.nlupdater;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NLJson {
+public class NLJson implements Serializable {
 	
-	private JSONObject jObject;
-	private JSONArray mVersionArray;
-	private String mFile;
-	private ArrayList<NLVersionJson> mVersions;
+	private static final long serialVersionUID = 1L;
+	private NLVersion lastVersion;
 	
 	public NLJson(String URL){
-		this.mFile = NLHttpClient.getStringPage(URL + "/update.json");
+		String mFile = NLNetwork.getStringPage(URL + "main.json");
+		JSONObject jObject = null;
+		JSONArray mVersionArray = null;
+		double nLastVersion = 0.0;
+		int iLastVersion = 0;
 		
+		lastVersion = null;
 		
 		try {
 			jObject = new JSONObject(mFile);
@@ -29,33 +32,55 @@ public class NLJson {
 			e.printStackTrace();
 		}
 		
-		mVersions = new ArrayList<NLVersionJson>();
-		
 		for(int i = 0; i < mVersionArray.length(); i++){
-			String version = null, changelog = null, uri = null, full = null, fromVersion[][] = null;
-			JSONObject jObjectVer = null;
-			JSONArray versionArray = null;
+			double d = 0;
 			try {
-				version = mVersionArray.getJSONObject(i).getString("version");
-				changelog = mVersionArray.getJSONObject(i).getString("changelog");
-				uri = mVersionArray.getJSONObject(i).getString("uri");
-				jObjectVer = new JSONObject(NLHttpClient.getStringPage(URL + uri + "/mod.json"));
-				full = jObjectVer.getString("full");
-				versionArray = jObjectVer.getJSONArray("fromVersion");
-				fromVersion = new String[2][versionArray.length()];
-				for(int j = 0; j < versionArray.length(); j++){
-					fromVersion[0][j] = versionArray.getJSONObject(j).getString("version");
-					fromVersion[1][j] = versionArray.getJSONObject(j).getString("uri");
-				}
+				d = Double.valueOf(mVersionArray.getJSONObject(i).getString("version"));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			mVersions.add(new NLVersionJson(version, changelog, full, fromVersion, uri));
+			if(d > nLastVersion){
+				nLastVersion = d;
+				iLastVersion = i;
+			}
 		}
+			
+		String mUri = null, mVersion = null, mFromVersion[][] = null, mChangelog = null, mFull = null;
+		JSONObject jObjectVer = null;
+		JSONArray versionArray = null;
+		try {
+			mVersion = mVersionArray.getJSONObject(iLastVersion).getString("version");
+			mUri = mVersionArray.getJSONObject(iLastVersion).getString("uri");
+			jObjectVer = new JSONObject(NLNetwork.getStringPage(URL + mUri + "/mod.json"));
+			mFull = jObjectVer.getString("full");
+			versionArray = jObjectVer.getJSONArray("fromVersion");
+			mFromVersion = new String[2][versionArray.length()];
+			for(int j = 0; j < versionArray.length(); j++){
+				mFromVersion[0][j] = versionArray.getJSONObject(j).getString("version");
+				mFromVersion[1][j] = versionArray.getJSONObject(j).getString("uri");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			mChangelog = mVersionArray.getJSONObject(iLastVersion).getString("changelog");
+			if(mChangelog.contains("url://")){
+				mChangelog = mChangelog.replace("url://", "");
+				mChangelog = NLNetwork.getStringPage(URL + "/" + mChangelog);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		if(mVersion != null && mFromVersion != null && mChangelog != null && mFull != null)
+			lastVersion = new NLVersion(mVersion, mChangelog, mFull, mFromVersion, mUri);
 	}
-
-	public ArrayList<NLVersionJson> getVersions(){
-		return this.mVersions;
+	
+	public NLVersion getLastVersion(){
+		return lastVersion;
 	}
 	
 }

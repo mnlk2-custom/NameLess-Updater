@@ -13,7 +13,25 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class NLHttpClient {
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+public class NLNetwork {
+	
+    /**
+     * Check the network state
+     * @param context context of application
+     * @return true if the phone is connected
+     */
+	public static boolean isConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
 	
 	/**
 	 * Function to get the code of the web page
@@ -37,7 +55,7 @@ public class NLHttpClient {
 		//Create client and a query to get the page
     		httpClient = new DefaultHttpClient();
     		httpGet = new HttpGet();
- 
+    		
     		//Set the query with the url in parameter
     		try {
 				uri = new URI(url);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menuCheck" android:title="@string/menuCheck" android:icon="@drawable/ic_menu_refresh"></item>
+    <item android:id="@+id/menuUpdateJSON" android:icon="@drawable/ic_menu_refresh" android:enabled="true" android:visible="true" android:title="@string/update"></item>
     <item android:id="@+id/menuSettings" android:title="@string/menuSettings" android:icon="@android:drawable/ic_menu_preferences"></item>
 </menu>
