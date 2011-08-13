@@ -41,6 +41,7 @@
 	<string name="preferencesDownloadDestSum">Dossier par défaut : /mnt/sdcard/</string>
 	<string name="defaultDownloadDir">/mnt/sdcard/</string>
 	<string name="updateAvalaibleNotifTitle">Une nouvelle version de NameLess est disponible</string>
-	<string name="newVersionNotif">Cliquer pour plus d\'informations</string> 
-    	<string name="tvInfo">tvInfo</string>
+	<string name="newVersionNotif">Cliquer pour plus d\'informations</string>
+	<string name="errorMD5">La vérification du fichier à échoué, le fichier est peut-être corrompu ! Voulez-vous le télécharger à nouveau ?</string>
+	<string name="retry">Rééssayer</string> 
 </resources>
