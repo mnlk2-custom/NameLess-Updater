@@ -52,7 +52,7 @@ public class NLUpdater extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        tvInfo = (TextView) findViewById(R.id.tvInfo);
+        //tvInfo = (TextView) findViewById(R.id.tvInfo);
         tvChangelog = (TextView) findViewById(R.id.tvChangelog);
         buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
         buttonUpdate.setOnClickListener(new OnClickListener() {

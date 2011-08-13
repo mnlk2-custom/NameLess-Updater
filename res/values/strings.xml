@@ -42,4 +42,5 @@
 	<string name="defaultDownloadDir">/mnt/sdcard/</string>
 	<string name="updateAvalaibleNotifTitle">Une nouvelle version de NameLess est disponible</string>
 	<string name="newVersionNotif">Cliquer pour plus d\'informations</string> 
+    	<string name="tvInfo">tvInfo</string>
 </resources>
