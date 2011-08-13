@@ -6,11 +6,16 @@
     android:layout_height="fill_parent"
     >
     <TextView
-    	android:id="@+id/tvChangelog"
+    	android:id="@+id/tvInfo"
     	android:gravity="center"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:text="@string/anyUpdate" />
+	<TextView
+    	android:id="@+id/tvChangelog"
+    	android:gravity="center"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"/>
 	<LinearLayout
 	    android:orientation="horizontal"
 	    android:gravity="center"
